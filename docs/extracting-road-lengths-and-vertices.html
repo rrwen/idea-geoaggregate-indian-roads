@@ -194,7 +194,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb18-3" title="3"><span class="co"># Plot the intersecting roads with the state/UT to check</span></a>
 <a class="sourceLine" id="cb18-4" title="4"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(stateUT2), <span class="dt">axes =</span> T, <span class="dt">border =</span> <span class="st">&quot;red&quot;</span>)</a>
 <a class="sourceLine" id="cb18-5" title="5"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(stateUT2Roads), <span class="dt">add =</span> T)</a></code></pre></div>
-<p><img src="_main_files/figure-html/extract-intersect-1.png" width="672" /></p>
+<p><img src="https://github.com/rrwen/idea-geoaggregate-indian-roads/raw/master/docs/_main_files/figure-html/extract-intersect-1.png" width="672" /></p>
 <p>Looking at the plot, we can see that we have extracted the roads that touch or intersect the second state <em>Andhra Pradesh</em>, but it does not actually trim or cut the roads when they extend past the administration borders. We can use <code>st_intersection</code> for more accuracy, but the computation time would rise drastically, so we will stick with <code>st_intersects</code> for now.</p>
 </div>
 <div id="calculating-road-lengths-and-vertex-statistics" class="section level2">
