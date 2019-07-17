@@ -1,0 +1,4 @@
+[
+["index.html", "Geoaggregating Roads in India by States and Union Territories (UT) 1 Motivation", " Geoaggregating Roads in India by States and Union Territories (UT) Richard Wen 17/07/2019 1 Motivation Since I was interested in doing a traffic-related study of India, I wanted to know more about the general characteristics of Indian roads - particularly at the state/UT level. I am also mentoring a student for a brief internship, and wanted to introduce him to some spatial data handling in R. Fortunately, DIVA-GIS provides us with geospatial data of administrative boundaries and roads for free (all in one easily accessible website - pretty awesome!). To implement this idea, I will be providing a brief walkthrough to geospatially aggregating (or geoaggregating) roads by state/UT. The aggregation will involve some "],
+["requirements.html", "2 Requirements", " 2 Requirements For this walkthrough, "]
+]

@@ -17,7 +17,7 @@ Since I was interested in doing a traffic-related study of India, I wanted to kn
 
 Fortunately, [DIVA-GIS](https://www.diva-gis.org/) provides us with geospatial data of administrative boundaries and roads for free (all in one easily accessible website - pretty awesome!).
 
-To implement this idea, I will be providing a brief guide to geospatially aggregating (or geoaggregating) roads by state/UT. The aggregation will involve some 
+To implement this idea, I will be providing a brief walkthrough to geospatially aggregating (or geoaggregating) roads by state/UT. The aggregation will involve some 
 
 # Requirements
 
