@@ -1,0 +1,24 @@
+---
+title: "Geoaggregating Roads in India by States and Union Territories (UT)"
+author: "Richard Wen"
+date: "17/07/2019"
+site: bookdown::bookdown_site
+output:
+  bookdown::gitbook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Motivation
+
+Since I was interested in doing a traffic-related study of India, I wanted to know more about the general characteristics of Indian roads - particularly at the state/UT level. I am also mentoring a student for a brief internship, and wanted to introduce him to some spatial data handling in R.
+
+Fortunately, [DIVA-GIS](https://www.diva-gis.org/) provides us with geospatial data of administrative boundaries and roads for free (all in one easily accessible website - pretty awesome!).
+
+To implement this idea, I will be providing a brief guide to geospatially aggregating (or geoaggregating) roads by state/UT. The aggregation will involve some 
+
+# Requirements
+
+For this walkthrough,
