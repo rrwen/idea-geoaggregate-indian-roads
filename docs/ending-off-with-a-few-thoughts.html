@@ -21,9 +21,10 @@
   
   
 
-<meta name="author" content="Richard Wen" />
+<meta name="author" content="Richard Wen rrwen.dev@gmail.com" />
 
 
+<meta name="date" content="2019-07-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -143,9 +144,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="requirements.html"><a href="requirements.html#loading-the-r-libraries"><i class="fa fa-check"></i><b>2.2</b> Loading the R Libraries</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html"><i class="fa fa-check"></i><b>3</b> Getting the DIVA-GIS Data</a><ul>
-<li class="chapter" data-level="3.1" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#downloading-the-data"><i class="fa fa-check"></i><b>3.1</b> Downloading the Data</a></li>
+<li class="chapter" data-level="3.1" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#downloading-the-data-automatically"><i class="fa fa-check"></i><b>3.1</b> Downloading the Data Automatically</a></li>
 <li class="chapter" data-level="3.2" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#inspecting-the-data"><i class="fa fa-check"></i><b>3.2</b> Inspecting the Data</a></li>
 <li class="chapter" data-level="3.3" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#reading-the-data-into-r"><i class="fa fa-check"></i><b>3.3</b> Reading the data into R</a></li>
+<li class="chapter" data-level="3.4" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#reading-the-data-for-our-walkthrough"><i class="fa fa-check"></i><b>3.4</b> Reading the Data for Our Walkthrough</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html"><i class="fa fa-check"></i><b>4</b> Visually and Interactively Exploring Our Data</a><ul>
 <li class="chapter" data-level="4.1" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html#static-mapping"><i class="fa fa-check"></i><b>4.1</b> Static Mapping</a></li>
@@ -178,14 +180,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="ending-off-with-a-few-thoughts" class="section level1">
 <h1><span class="header-section-number">6</span> Ending Off with a Few Thoughts</h1>
-<p>So we started with the idea to extract a number of informative aggregate characteristics of roads in India by state/UT, but found that there may be some issues with accuracy (coordinate system and trimming near state/UT boundaries) and computation time (time it took to process one state/UT).</p>
+<p>We started with the idea to extract a number of informative aggregate characteristics of roads in India by state/UT, but found that there may be some issues with accuracy (coordinate system and trimming near state/UT boundaries) and computation time (time it took to process one state/UT).</p>
 <p>Ideally, we should project each state/UT to an appropriate planar coordinate system to achieve more accurate spatial intersection results. There should probably also be a good amount of trimming/cutting involved as roads tend to be partially outside the boundaries of the states/UTs.</p>
-<p>Although the data was only a few megabytes, the computation time was roughly 10.84203 secs minutes for the single state/UT, estimated to be 390.3131 secs for all state/UTs. This could be problematic as we receive finer boundary or road data, and scale to larger more detailed datasets.</p>
+<p>Although the data was only a few megabytes, the computation time was roughly 11.53 secs minutes for the single state/UT, estimated to be 415.22 secs for all state/UTs. This could be problematic as we receive finer boundary or road data, and scale to larger more detailed datasets.</p>
 <p>Some exploration into optimizing the spatial intersections and trimming/cutting could be a good start to obtaining quicker results in a reasonable amount of time (especially for learning or education).</p>
 <p>Getting the road lengths and vertices statistics could be useful (as far as I can tell) in providing information on road complexity and development. This could be a potentially good measure for getting a glimpse at the general road design at a state/UT level, while providing some insight into whether or not road design at that level has an effect on important applications such as road traffic safety.</p>
 <p>Overall, R has proven to be great for trying out ideas, experimenting with new libraries, and providing an easier transition into open source data analysis for those unfamiliar with spatial data handling - particularly when <code>install.packages</code> just works without any hiccups on windows!</p>
 <p>I am hoping to take this idea a little further and apply it to study traffic crashes in India, and perhaps refine this walkthrough so it becomes a little more beginner friendly.</p>
-<p>It was a lot of fun to write this and I’m hoping to try out some more ideas when I have some more time!</p>
+<p>It was a lot of fun to write this and I’m hoping to try out some more ideas/thoughts when I have time!</p>
 
 </div>
             </section>

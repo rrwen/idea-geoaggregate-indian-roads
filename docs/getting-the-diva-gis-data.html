@@ -21,9 +21,10 @@
   
   
 
-<meta name="author" content="Richard Wen" />
+<meta name="author" content="Richard Wen rrwen.dev@gmail.com" />
 
 
+<meta name="date" content="2019-07-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -143,9 +144,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="requirements.html"><a href="requirements.html#loading-the-r-libraries"><i class="fa fa-check"></i><b>2.2</b> Loading the R Libraries</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html"><i class="fa fa-check"></i><b>3</b> Getting the DIVA-GIS Data</a><ul>
-<li class="chapter" data-level="3.1" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#downloading-the-data"><i class="fa fa-check"></i><b>3.1</b> Downloading the Data</a></li>
+<li class="chapter" data-level="3.1" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#downloading-the-data-automatically"><i class="fa fa-check"></i><b>3.1</b> Downloading the Data Automatically</a></li>
 <li class="chapter" data-level="3.2" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#inspecting-the-data"><i class="fa fa-check"></i><b>3.2</b> Inspecting the Data</a></li>
 <li class="chapter" data-level="3.3" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#reading-the-data-into-r"><i class="fa fa-check"></i><b>3.3</b> Reading the data into R</a></li>
+<li class="chapter" data-level="3.4" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#reading-the-data-for-our-walkthrough"><i class="fa fa-check"></i><b>3.4</b> Reading the Data for Our Walkthrough</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html"><i class="fa fa-check"></i><b>4</b> Visually and Interactively Exploring Our Data</a><ul>
 <li class="chapter" data-level="4.1" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html#static-mapping"><i class="fa fa-check"></i><b>4.1</b> Static Mapping</a></li>
@@ -178,14 +180,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="getting-the-diva-gis-data" class="section level1">
 <h1><span class="header-section-number">3</span> Getting the DIVA-GIS Data</h1>
-<p><a href="https://www.diva-gis.org/">DIVA-GIS</a> provides free country level road and administrative boundary data for all of India, which can be accessed through the following links:</p>
+<p><a href="https://www.diva-gis.org/">DIVA-GIS</a> provides free country level road and administrative boundary data for all of India, which can be conveniently accessed through the following links:</p>
 <ul>
 <li><strong>Administrative Boundaries</strong> (<a href="http://biogeo.ucdavis.edu/data/diva/adm/IND_adm.zip">Download</a>)</li>
 <li><strong>Roads</strong>: (<a href="http://biogeo.ucdavis.edu/data/diva/rds/IND_rds.zip">Download</a>)</li>
 </ul>
-<div id="downloading-the-data" class="section level2">
-<h2><span class="header-section-number">3.1</span> Downloading the Data</h2>
-<p>Notice that these are zip files and need to first be unzipped to see its contents. To do that, we will:</p>
+<p>These data are also sourced from <a href="https://www.gadm.org/about.html">GADM</a>, where the data can also be downloaded in additional formats <a href="https://www.gadm.org/download_country_v3.html">here</a>.</p>
+<div id="downloading-the-data-automatically" class="section level2">
+<h2><span class="header-section-number">3.1</span> Downloading the Data Automatically</h2>
+<p>You can download the data manually, but where’s the fun in that? Lets make our code reproducible by making downloads automatic!</p>
+<p>Notice that the data from the links are zip files, and need to first be unzipped to see its contents. To do that, we will:</p>
 <ol style="list-style-type: decimal">
 <li>Download the datasets into a folder called data</li>
 <li>Unzip the downloaded files</li>
@@ -219,23 +223,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>and the roads data:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">list.files</span>(<span class="st">&quot;data/india-roads&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] &quot;IND_roads.dbf&quot; &quot;IND_roads.prj&quot; &quot;IND_roads.shp&quot; &quot;IND_roads.shx&quot;</code></pre>
-<p>In the administrative area and roads data, there are 4 types of files (.cpg, .dbf, .shp, .prj, .shx), which correspond to character encoding files, database file, shapefile, projection system file, and a shape/font file used commonly by CAD. The main file we will be focusing on here is the shapefile (.shp).</p>
-<p>For the administrative area data, there are also levels 0 to 3 (larger less detailed boundaries to smaller more refined boundaries). Since we are looking for state/UT boundaries (a total of 36), we will use level 1, which has 36 geometric features.</p>
+<p>In the administrative area and roads data, there are 4 types of files (.cpg, .dbf, .shp, .prj, .shx), which correspond to character encoding files, database file, shapefile, projection system file, and a shape/font file used commonly by CAD. The main file we will be focusing on here is the shapefile (.shp), which is an <a href="https://www.esri.com/">ESRI</a> (a well known Geographic Information Systems (GIS) company) <a href="https://docs.qgis.org/latest/en/docs/gentle_gis_introduction/vector_data.html">vector data</a> format that is widely used in the field of GIS.</p>
+<p>More details on shapefiles can be found <a href="https://www.esri.com/library/whitepapers/pdfs/shapefile.pdf">here</a> from ESRI, and <a href="https://gdal.org/drivers/vector/shapefile.html">here</a> from <a href="https://gdal.org/">gdal</a>.</p>
 </div>
 <div id="reading-the-data-into-r" class="section level2">
 <h2><span class="header-section-number">3.3</span> Reading the data into R</h2>
-<p>Based on the inspection above, go ahead and read the appropriate data into a sf object:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/india-roads/IND_roads.shp&quot;</span>)</a></code></pre></div>
-<pre><code>## Reading layer `IND_roads&#39; from data source `D:\windows\Users\rrwen\Desktop\idea-geoaggregate-indian-roads\data\india-roads\IND_roads.shp&#39; using driver `ESRI Shapefile&#39;
-## Simple feature collection with 19148 features and 5 fields
-## geometry type:  MULTILINESTRING
-## dimension:      XY
-## bbox:           xmin: 68.49822 ymin: 7.925284 xmax: 97.33479 ymax: 35.50128
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">admin &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/india-admin-areas/IND_adm1.shp&quot;</span>)</a></code></pre></div>
-<pre><code>## Reading layer `IND_adm1&#39; from data source `D:\windows\Users\rrwen\Desktop\idea-geoaggregate-indian-roads\data\india-admin-areas\IND_adm1.shp&#39; using driver `ESRI Shapefile&#39;
-## Simple feature collection with 36 features and 9 fields
+<p>Now that we hae some understanding of the file formats, we can try reading some of the files into R:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">lvl0Data &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/india-admin-areas/IND_adm0.shp&quot;</span>)</a></code></pre></div>
+<pre><code>## Reading layer `IND_adm0&#39; from data source `D:\windows\Users\rrwen\Desktop\idea-geoaggregate-indian-roads\data\india-admin-areas\IND_adm0.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 1 feature and 70 fields
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY
 ## bbox:           xmin: 68.18625 ymin: 6.754256 xmax: 97.41516 ymax: 35.50133
@@ -250,7 +246,76 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Spatial reference ID (epsg SRID) for defining the projection system used</li>
 <li>String defining additional parameters for the projection system</li>
 </ul>
-<p>The next section will focus on producing some quick and basic maps for visual exploration.</p>
+<p>There are 29 states and 7 UTs in India for a total of 36 states/UTs (<a href="https://knowindia.gov.in/states-uts/">knowindia.gov</a>), which means we should have 36 geometric objects in one of the datasets inside <code>data/india-admin-areas</code>.</p>
+<p>Looks like the file <code>IND_adm0.shp</code> (level 0) only has 1 feature, which is probably not the data level we are looking for.</p>
+<p>Let’s try the level 1 administrative areas next:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">lvl1Data &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/india-admin-areas/IND_adm1.shp&quot;</span>)</a></code></pre></div>
+<pre><code>## Reading layer `IND_adm1&#39; from data source `D:\windows\Users\rrwen\Desktop\idea-geoaggregate-indian-roads\data\india-admin-areas\IND_adm1.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 36 features and 9 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: 68.18625 ymin: 6.754256 xmax: 97.41516 ymax: 35.50133
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs</code></pre>
+<p>Hey, this looks like it could be the states/UTS! There are 36 features (geometric objects) here, but just to be sure, lets check the level 2 and 3 data as well:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">lvl2Data &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/india-admin-areas/IND_adm2.shp&quot;</span>)</a></code></pre></div>
+<pre><code>## Reading layer `IND_adm2&#39; from data source `D:\windows\Users\rrwen\Desktop\idea-geoaggregate-indian-roads\data\india-admin-areas\IND_adm2.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 594 features and 11 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: 68.18625 ymin: 6.754256 xmax: 97.41516 ymax: 35.50133
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">lvl3Data &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/india-admin-areas/IND_adm3.shp&quot;</span>)</a></code></pre></div>
+<pre><code>## Reading layer `IND_adm3&#39; from data source `D:\windows\Users\rrwen\Desktop\idea-geoaggregate-indian-roads\data\india-admin-areas\IND_adm3.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 2299 features and 13 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: 68.18625 ymin: 6.754256 xmax: 97.41516 ymax: 35.50133
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs</code></pre>
+<p>The level 2 data has 594 features (a bit too much for states/UTs data), while the level 3 data has even more at 2299 features (far too many objects!).</p>
+<p>So it looks like the level 1 data is what we are looking for! Let’s map it to further inspect it (more on this in the next section):</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(lvl1Data))</a></code></pre></div>
+<p><img src="main_files/figure-html/data-read-map-1.png" width="672" /></p>
+<p>It was not a coincidence that level 1 had 36 features when we look at the map above!</p>
+<p>To recap, we can see that there are levels 0 to 3 (larger less detailed boundaries at level 0 to smaller more refined boundaries at level 3). Since we are looking for state/UT boundaries (a total of 36), we will use level 1, which has 36 geometric features for our walkthrough.</p>
+<p><strong>Note</strong>: The associated state/UT names can also be extracted from the column <code>NAME_1</code> which refers to the names for level 1 administrative boundaries:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">lvl1Data<span class="op">$</span>NAME_<span class="dv">1</span></a></code></pre></div>
+<pre><code>##  [1] Andaman and Nicobar    Andhra Pradesh         Arunachal Pradesh     
+##  [4] Assam                  Bihar                  Chandigarh            
+##  [7] Chhattisgarh           Dadra and Nagar Haveli Daman and Diu         
+## [10] Delhi                  Goa                    Gujarat               
+## [13] Haryana                Himachal Pradesh       Jammu and Kashmir     
+## [16] Jharkhand              Karnataka              Kerala                
+## [19] Lakshadweep            Madhya Pradesh         Maharashtra           
+## [22] Manipur                Meghalaya              Mizoram               
+## [25] Nagaland               Orissa                 Puducherry            
+## [28] Punjab                 Rajasthan              Sikkim                
+## [31] Tamil Nadu             Telangana              Tripura               
+## [34] Uttar Pradesh          Uttaranchal            West Bengal           
+## 36 Levels: Andaman and Nicobar Andhra Pradesh Arunachal Pradesh ... West Bengal</code></pre>
+</div>
+<div id="reading-the-data-for-our-walkthrough" class="section level2">
+<h2><span class="header-section-number">3.4</span> Reading the Data for Our Walkthrough</h2>
+<p>Based on the inspection above, go ahead and read the appropriate data into a sf object:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">roads &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/india-roads/IND_roads.shp&quot;</span>)</a></code></pre></div>
+<pre><code>## Reading layer `IND_roads&#39; from data source `D:\windows\Users\rrwen\Desktop\idea-geoaggregate-indian-roads\data\india-roads\IND_roads.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 19148 features and 5 fields
+## geometry type:  MULTILINESTRING
+## dimension:      XY
+## bbox:           xmin: 68.49822 ymin: 7.925284 xmax: 97.33479 ymax: 35.50128
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">admin &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/india-admin-areas/IND_adm1.shp&quot;</span>)</a></code></pre></div>
+<pre><code>## Reading layer `IND_adm1&#39; from data source `D:\windows\Users\rrwen\Desktop\idea-geoaggregate-indian-roads\data\india-admin-areas\IND_adm1.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 36 features and 9 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: 68.18625 ymin: 6.754256 xmax: 97.41516 ymax: 35.50133
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs</code></pre>
+<p>The next section will focus on producing some basic maps for visual exploration.</p>
 </div>
 </div>
             </section>

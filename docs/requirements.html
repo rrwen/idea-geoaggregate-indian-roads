@@ -21,9 +21,10 @@
   
   
 
-<meta name="author" content="Richard Wen" />
+<meta name="author" content="Richard Wen rrwen.dev@gmail.com" />
 
 
+<meta name="date" content="2019-07-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -143,9 +144,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="requirements.html"><a href="requirements.html#loading-the-r-libraries"><i class="fa fa-check"></i><b>2.2</b> Loading the R Libraries</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html"><i class="fa fa-check"></i><b>3</b> Getting the DIVA-GIS Data</a><ul>
-<li class="chapter" data-level="3.1" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#downloading-the-data"><i class="fa fa-check"></i><b>3.1</b> Downloading the Data</a></li>
+<li class="chapter" data-level="3.1" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#downloading-the-data-automatically"><i class="fa fa-check"></i><b>3.1</b> Downloading the Data Automatically</a></li>
 <li class="chapter" data-level="3.2" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#inspecting-the-data"><i class="fa fa-check"></i><b>3.2</b> Inspecting the Data</a></li>
 <li class="chapter" data-level="3.3" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#reading-the-data-into-r"><i class="fa fa-check"></i><b>3.3</b> Reading the data into R</a></li>
+<li class="chapter" data-level="3.4" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#reading-the-data-for-our-walkthrough"><i class="fa fa-check"></i><b>3.4</b> Reading the Data for Our Walkthrough</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html"><i class="fa fa-check"></i><b>4</b> Visually and Interactively Exploring Our Data</a><ul>
 <li class="chapter" data-level="4.1" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html#static-mapping"><i class="fa fa-check"></i><b>4.1</b> Static Mapping</a></li>
@@ -178,7 +180,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="requirements" class="section level1">
 <h1><span class="header-section-number">2</span> Requirements</h1>
-<p>For this walkthrough, you will need to install:</p>
+<p>For this walkthrough we will be using the <a href="https://www.r-project.org/">R</a> programming language.</p>
+<p>You will need to install:</p>
 <ol style="list-style-type: decimal">
 <li><a href="https://www.r-project.org/">R and RTools</a> programming language and compiler tool</li>
 <li><a href="https://www.rstudio.com/">R Studio</a> (<em>Suggested</em>) editor for easily working with R</li>
@@ -188,16 +191,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="overview-of-r-packages" class="section level2">
 <h2><span class="header-section-number">2.1</span> Overview of R Packages</h2>
 <p><a href="https://cran.r-project.org/package=sf">sf</a> is a very convenient and relatively user-friendly R package that provides tools for working with geometries - making it easy to read, write, and work with geospatial data.</p>
-<p><a href="https://cran.r-project.org/package=mapview">mapview</a> provides interactive mapping functionality so we can inspect geospatial data in detail. For our particular purpose, it also provides a <code>npts</code> function that allows us to extract the number of vertices given a polygon or polyline.</p>
-<p><a href="https://cran.r-project.org/package=lwgeom">lwgeom</a> is needed by sf to get the lengths of polylines.</p>
+<p><a href="https://cran.r-project.org/package=mapview">mapview</a> provides interactive mapping functionality so we can inspect geospatial data in detail. For our particular purpose, it also provides a handy <code>npts</code> function that allows us to extract the number of vertices given a polygon or polyline.</p>
+<p><a href="https://cran.r-project.org/package=lwgeom">lwgeom</a> is needed by sf to get the lengths of polylines and other geometric objects, so we will install it to satisfy the dependencies.</p>
 </div>
 <div id="loading-the-r-libraries" class="section level2">
 <h2><span class="header-section-number">2.2</span> Loading the R Libraries</h2>
-<p>After you have finished installing the requirements, don’t forget to load the libraries in the R console!</p>
+<p>After you have finished installing the requirements, don’t forget to load the libraries in the R console!:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(sf)</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw">library</span>(mapview)</a></code></pre></div>
 <p><strong>Note</strong>: All code will be assumed to be in the R console moving forward.</p>
-<p>After satisfying all the requirements, the next section will show you how to get the DIVA-GIS data into R.</p>
+<p>After satisfying all of the requirements, the next section will show you how to get the DIVA-GIS data into R.</p>
 </div>
 </div>
             </section>

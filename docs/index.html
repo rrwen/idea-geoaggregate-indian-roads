@@ -21,9 +21,10 @@
   
   
 
-<meta name="author" content="Richard Wen" />
+<meta name="author" content="Richard Wen rrwen.dev@gmail.com" />
 
 
+<meta name="date" content="2019-07-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -143,9 +144,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="requirements.html"><a href="requirements.html#loading-the-r-libraries"><i class="fa fa-check"></i><b>2.2</b> Loading the R Libraries</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html"><i class="fa fa-check"></i><b>3</b> Getting the DIVA-GIS Data</a><ul>
-<li class="chapter" data-level="3.1" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#downloading-the-data"><i class="fa fa-check"></i><b>3.1</b> Downloading the Data</a></li>
+<li class="chapter" data-level="3.1" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#downloading-the-data-automatically"><i class="fa fa-check"></i><b>3.1</b> Downloading the Data Automatically</a></li>
 <li class="chapter" data-level="3.2" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#inspecting-the-data"><i class="fa fa-check"></i><b>3.2</b> Inspecting the Data</a></li>
 <li class="chapter" data-level="3.3" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#reading-the-data-into-r"><i class="fa fa-check"></i><b>3.3</b> Reading the data into R</a></li>
+<li class="chapter" data-level="3.4" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#reading-the-data-for-our-walkthrough"><i class="fa fa-check"></i><b>3.4</b> Reading the Data for Our Walkthrough</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html"><i class="fa fa-check"></i><b>4</b> Visually and Interactively Exploring Our Data</a><ul>
 <li class="chapter" data-level="4.1" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html#static-mapping"><i class="fa fa-check"></i><b>4.1</b> Static Mapping</a></li>
@@ -178,14 +180,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="header">
 <h1 class="title">Geoaggregating Roads in India by States and Union Territories (UT)</h1>
-<p class="author"><em>Richard Wen</em></p>
-<p class="date"><em>17/07/2019</em></p>
+<p class="author"><em>Richard Wen <a href="mailto:rrwen.dev@gmail.com" class="email">rrwen.dev@gmail.com</a></em></p>
+<p class="date"><em>July 18, 2019</em></p>
 </div>
 <div id="the-idea" class="section level1">
 <h1><span class="header-section-number">1</span> The Idea</h1>
-<p>Since I was interested in doing a traffic-related study of India, I wanted to know more about the general characteristics of Indian roads - particularly at the state/UT level. I am also mentoring a student for a brief internship, and wanted to introduce him to some spatial data handling in R since he was interested in learning some data analysis.</p>
+<p>Since I was interested in doing a traffic-related study of India, I wanted to know more about the general characteristics of Indian roads - particularly at the state/UT level. I am also mentoring a student for a brief internship (bright kid with great potential!), and wanted to introduce him to some spatial data handling in R, since he was interested in learning some data analysis.</p>
 <p>Fortunately, <a href="https://www.diva-gis.org/">DIVA-GIS</a> provides us with geospatial data of administrative boundaries and roads for free (all in one easily accessible website - pretty awesome!).</p>
-<p>To implement this idea, I will be providing a brief walkthrough to geospatially aggregating (or geoaggregating) roads by state/UT. The aggregation will involve some spatial intersections, and polyline length/vertex extractions. For the sake of time (as it is computationally expensive to process all the states/UTs), we will do one state, but initially look at the entire dataset.</p>
+<p>To implement this idea, I will be providing a brief walkthrough to geospatially aggregating (or geoaggregating) roads by state/Union Territory (UT). The aggregation will involve some spatial intersections, and polyline length/vertex extractions. For the sake of time (as it may be redundant and computationally expensive to process all the states/UTs for this walkthrough), we will play around with one state, but initially look at the entire dataset.</p>
 </div>
             </section>
 

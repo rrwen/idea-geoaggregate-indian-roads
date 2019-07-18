@@ -1,7 +1,7 @@
 ---
 title: "Geoaggregating Roads in India by States and Union Territories (UT)"
-author: "Richard Wen"
-date: "17/07/2019"
+author: "Richard Wen <rrwen.dev@gmail.com>"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 site: bookdown::bookdown_site
 output:
   bookdown::gitbook
@@ -13,15 +13,17 @@ knitr::opts_chunk$set(echo = T)
 
 # The Idea
 
-Since I was interested in doing a traffic-related study of India, I wanted to know more about the general characteristics of Indian roads - particularly at the state/UT level. I am also mentoring a student for a brief internship, and wanted to introduce him to some spatial data handling in R since he was interested in learning some data analysis.
+Since I was interested in doing a traffic-related study of India, I wanted to know more about the general characteristics of Indian roads - particularly at the state/UT level. I am also mentoring a student for a brief internship (bright kid with great potential!), and wanted to introduce him to some spatial data handling in R, since he was interested in learning some data analysis.
 
 Fortunately, [DIVA-GIS](https://www.diva-gis.org/) provides us with geospatial data of administrative boundaries and roads for free (all in one easily accessible website - pretty awesome!).
 
-To implement this idea, I will be providing a brief walkthrough to geospatially aggregating (or geoaggregating) roads by state/UT. The aggregation will involve some spatial intersections, and polyline length/vertex extractions. For the sake of time (as it is computationally expensive to process all the states/UTs), we will do one state, but initially look at the entire dataset.
+To implement this idea, I will be providing a brief walkthrough to geospatially aggregating (or geoaggregating) roads by state/Union Territory (UT). The aggregation will involve some spatial intersections, and polyline length/vertex extractions. For the sake of time (as it may be redundant and computationally expensive to process all the states/UTs for this walkthrough), we will play around with one state, but initially look at the entire dataset.
 
 # Requirements
 
-For this walkthrough, you will need to install:
+For this walkthrough we will be using the [R](https://www.r-project.org/) programming language.
+
+You will need to install:
 
 1. [R and RTools](https://www.r-project.org/) programming language and compiler tool
 2. [R Studio](https://www.rstudio.com/) (*Suggested*) editor for easily working with R
@@ -35,13 +37,13 @@ install.packages(c("sf", "lwgeom"))
 
 [sf](https://cran.r-project.org/package=sf) is a very convenient and relatively user-friendly R package that provides tools for working with geometries - making it easy to read, write, and work with geospatial data.
 
-[mapview](https://cran.r-project.org/package=mapview) provides interactive mapping functionality so we can inspect geospatial data in detail. For our particular purpose, it also provides a `npts` function that allows us to extract the number of vertices given a polygon or polyline.
+[mapview](https://cran.r-project.org/package=mapview) provides interactive mapping functionality so we can inspect geospatial data in detail. For our particular purpose, it also provides a handy `npts` function that allows us to extract the number of vertices given a polygon or polyline.
 
-[lwgeom](https://cran.r-project.org/package=lwgeom) is needed by sf to get the lengths of polylines.
+[lwgeom](https://cran.r-project.org/package=lwgeom) is needed by sf to get the lengths of polylines and other geometric objects, so we will install it to satisfy the dependencies.
 
 ## Loading the R Libraries
 
-After you have finished installing the requirements, don't forget to load the libraries in the R console!
+After you have finished installing the requirements, don't forget to load the libraries in the R console!:
 
 ```{r requirements-library, message=F}
 library(sf)
@@ -50,18 +52,22 @@ library(mapview)
 
 **Note**: All code will be assumed to be in the R console moving forward.
 
-After satisfying all the requirements, the next section will show you how to get the DIVA-GIS data into R.
+After satisfying all of the requirements, the next section will show you how to get the DIVA-GIS data into R.
 
 # Getting the DIVA-GIS Data
 
-[DIVA-GIS](https://www.diva-gis.org/) provides free country level road and administrative boundary data for all of India, which can be accessed through the following links:
+[DIVA-GIS](https://www.diva-gis.org/) provides free country level road and administrative boundary data for all of India, which can be conveniently accessed through the following links:
 
 * **Administrative Boundaries** ([Download](http://biogeo.ucdavis.edu/data/diva/adm/IND_adm.zip))
 * **Roads**: ([Download](http://biogeo.ucdavis.edu/data/diva/rds/IND_rds.zip))
 
-## Downloading the Data
+These data are also sourced from [GADM](https://www.gadm.org/about.html), where the data can also be downloaded in additional formats [here](https://www.gadm.org/download_country_v3.html).
 
-Notice that these are zip files and need to first be unzipped to see its contents. To do that, we will:
+## Downloading the Data Automatically
+
+You can download the data manually, but where's the fun in that? Lets make our code reproducible by making downloads automatic!
+
+Notice that the data from the links are zip files, and need to first be unzipped to see its contents. To do that, we will:
 
 1. Download the datasets into a folder called data
 2. Unzip the downloaded files
@@ -98,17 +104,16 @@ and the roads data:
 list.files("data/india-roads")
 ```
 
-In the administrative area and roads data, there are 4 types of files (.cpg, .dbf, .shp, .prj, .shx), which correspond to character encoding files, database file, shapefile, projection system file, and a shape/font file used commonly by CAD. The main file we will be focusing on here is the shapefile (.shp).
+In the administrative area and roads data, there are 4 types of files (.cpg, .dbf, .shp, .prj, .shx), which correspond to character encoding files, database file, shapefile, projection system file, and a shape/font file used commonly by CAD. The main file we will be focusing on here is the shapefile (.shp), which is an [ESRI](https://www.esri.com/) (a well known Geographic Information Systems (GIS) company) [vector data](https://docs.qgis.org/latest/en/docs/gentle_gis_introduction/vector_data.html) format that is widely used in the field of GIS.
 
-For the administrative area data, there are also levels 0 to 3 (larger less detailed boundaries to smaller more refined boundaries). Since we are looking for state/UT boundaries (a total of 36), we will use level 1, which has 36 geometric features.
+More details on shapefiles can be found [here](https://www.esri.com/library/whitepapers/pdfs/shapefile.pdf) from ESRI, and [here](https://gdal.org/drivers/vector/shapefile.html) from [gdal](https://gdal.org/).
 
 ## Reading the data into R
 
-Based on the inspection above, go ahead and read the appropriate data into a sf object:
+Now that we hae some understanding of the file formats, we can try reading some of the files into R:
 
-```{r data-inspect-variables}
-roads <- st_read("data/india-roads/IND_roads.shp")
-admin <- st_read("data/india-admin-areas/IND_adm1.shp")
+```{r data-read-try}
+lvl0Data <- st_read("data/india-admin-areas/IND_adm0.shp")
 ```
 
 When you read the data into R, it will provide you with some general information about the data:
@@ -120,7 +125,54 @@ When you read the data into R, it will provide you with some general information
 * Spatial reference ID (epsg SRID) for defining the projection system used
 * String defining additional parameters for the projection system
 
-The next section will focus on producing some quick and basic maps for visual exploration.
+There are 29 states and 7 UTs in India for a total of 36 states/UTs ([knowindia.gov](https://knowindia.gov.in/states-uts/)), which means we should have 36 geometric objects in one of the datasets inside `data/india-admin-areas`.
+
+Looks like the file `IND_adm0.shp` (level 0) only has `r nrow(lvl0Data)` feature, which is probably not the data level we are looking for.
+
+Let's try the level 1 administrative areas next:
+
+```{r data-read-lvl1}
+lvl1Data <- st_read("data/india-admin-areas/IND_adm1.shp")
+```
+
+Hey, this looks like it could be the states/UTS! There are `r nrow(lvl1Data)` features (geometric objects) here, but just to be sure, lets check the level 2 and 3 data as well:
+
+```{r data-read-lvl2}
+lvl2Data <- st_read("data/india-admin-areas/IND_adm2.shp")
+```
+
+```{r data-read-lvl3}
+lvl3Data <- st_read("data/india-admin-areas/IND_adm3.shp")
+```
+
+The level 2 data has `r nrow(lvl2Data)` features (a bit too much for states/UTs data), while the level 3 data has even more at `r nrow(lvl3Data)` features (far too many objects!).
+
+So it looks like the level 1 data is what we are looking for! Let's map it to further inspect it (more on this in the next section):
+
+```{r data-read-map}
+plot(st_geometry(lvl1Data))
+```
+
+It was not a coincidence that level 1 had 36 features when we look at the map above!
+
+To recap, we can see that there are levels 0 to 3 (larger less detailed boundaries at level 0 to smaller more refined boundaries at level 3). Since we are looking for state/UT boundaries (a total of 36), we will use level 1, which has 36 geometric features for our walkthrough.
+
+**Note**: The associated state/UT names can also be extracted from the column `NAME_1` which refers to the names for level 1 administrative boundaries:
+
+```{r data-read-names}
+lvl1Data$NAME_1
+```
+
+## Reading the Data for Our Walkthrough
+
+Based on the inspection above, go ahead and read the appropriate data into a sf object:
+
+```{r data-inspect-variables}
+roads <- st_read("data/india-roads/IND_roads.shp")
+admin <- st_read("data/india-admin-areas/IND_adm1.shp")
+```
+
+The next section will focus on producing some basic maps for visual exploration.
 
 # Visually and Interactively Exploring Our Data
 
@@ -134,13 +186,22 @@ Here we need to use `st_geometry` to generate our static maps on the geometries 
 plot(st_geometry(admin), axes = T)
 ```
 
-We chose to show the axis `axis = T`, giving a general idea of what coordinates each state/UT is located at. We also show the polygonal boundaries to give us a look at how large each state/UT is.
+We chose to show the axis `axis = T`, giving a general idea of what coordinates each state/UT is located at. We also show the polygonal boundaries to give us a look at how large each state/UT is. Looks like there are relatively larger states/UTs near the northern center of India, while the south and western edges have smaller states/UTs.
 
 ```{r visual-roads}
 plot(st_geometry(roads), axes = T)
 ```
 
 Since road data is generally polylines, and we are using all roads without considering their classification (highways, streets, etc), we can simply plot just the lines. This gives us an idea of which areas in India have more roads (are more road dense) than that of others. We can see that most of the south and eastern areas in India are relatively denser (darker portions) than the other areas.
+
+In addition to plotting a single dataset, we can also layer them on top of each other with `add = T`, change colors with `col`, and change polygon line (border) colors with `border`:
+
+```{r visual-layers}
+plot(st_geometry(roads), axes = T, col = "gray")
+plot(st_geometry(admin), add = T, border = "red")
+```
+
+In the layered map, we can see that in some states/UTs in the eastern half (near the center) and southern portions of India have areas that are more road dense, while other areas are less road dense when we move towards the west.
 
 ## Web Mapping
 
@@ -151,22 +212,44 @@ It's pretty cool - try it out!:
 ```{r visual-interactive-admin}
 mapview(admin, viewer.suppress = F)
 ```
+
+Although we can view single datasets by themselves, they are often not too interesting until we layer them on top of another dataset. We do that by first creating an initial map `roadsMap`, then we add another map to it with the `map = roadsMap` option, which tells `mapView` which existing map the new map should be added to:
+
+Finally, let's play around with some styling options and create a dark themed map!
   
-```{r visual-interactive-roads}
-mapview(roads, viewer.suppress = F)
+```{r visual-interactive-layers}
+# Create an interactive roads map
+roadsMap <- mapview(roads, viewer.suppress = F, legend = F,
+                    map.types = "CartoDB.DarkMatter",
+                    color = "#d2d2d2",
+                    alpha = 0.5, # transparency
+                    layer.name = "Roads",
+                    lwd = 0.75) # line width
+
+# Add state/UT map to roads map
+mapView(admin, map = roadsMap,
+        color = "#f5f5f5",
+        col.region = "#f5f5f5",
+        alpha = 0.75,
+        alpha.regions = 0, # remove polygon fill to see roads underneath
+        layer.name = "States/UTs",
+        lwd = 1)
 ```
+
   
-Next, we will use `sf`, `lwgeom`, and `mapview` to extract road lengths and vertices, and to geoaggregate them into our states/UTs.
+As we saw before, particular regions have more "compact" roads or road density - notably the eastern half of India and towards the south. We can inspect some of the states in these areas further by clicking on them. Here a few states are worth noting as they are more "road dense" throughout their entire areas: Jharkhand, Tamil Nadu, Telangana, Karnataka, Chhattisgarh (to name a few). However, visual inspection can be a little subjective as it can be based on perspective and visual design - this is where doing some calculations with the data will help!
+
+In the next section, we will use `sf`, `lwgeom`, and `mapview` to extract road lengths and vertices, and to geoaggregate them into a chosen state/UT to demonstrate some spatial processing.
 
 # Extracting Road Lengths and Vertices
 
-Ideally, we will apply the following approach for each state/UT to get the aggregate road lengths and vertices for all of India:
+Ideally, we would want to apply the following approach for each state/UT to get the aggregate road lengths and vertices for all of India:
 
 1. Get the roads that spatially intersect (approximately) the state/UT
 2. Calculate the min/max/mean/sum lengths and vertices of intersecting roads
 3. Add these calculated values to the admin data
 
-The goal is to have road length and vertex statistics for each state/UT in India. However, we will process only an average sized state in the dataset as the rest of the states/UTs will simply be repetitions of the approach above.
+The goal is to have road length and vertex statistics for each state/UT in India for a more numeric comparison between states/UTs, and possibly some more accurate maps. However, we will process only an average sized state in the dataset as the rest of the states/UTs will simply be repetitions of the approach above.
 
 **Note 1:** The spatial intersection (first step of our approach) here may not be completely accurate as we are only checking for roads that intersect each state/UT, but we are not trimming/cutting long roads that lie inside a state/UT and extend partially outside of it.
 
@@ -242,7 +325,7 @@ We can see that we selected state/UT `r stateUT$NAME_1[[1]]`, with an area of `r
 
 ## Extracting Intersecting Roads
 
-Now that we have selected our state/UT, lets start the extraction by trying to get all the roads that intersect a single state/UT (since this is the start, we also want to keep track of the processing time with `Sys.time`):
+Now that we have chosen our state/UT, lets start the extraction by trying to get all the roads that intersect a single state/UT (since this is the start of the process, we also want to keep track of the processing time with `Sys.time`):
 
 ```{r extract-intersect, message=F, cache=T}
 # Track the start time of our extraction process for a single state/UT
@@ -260,7 +343,7 @@ plot(st_geometry(stateUT), axes = T, border = "red")
 plot(st_geometry(stateUTRoads), add = T)
 ```
 
-Looking at the plot, we can see that we have extracted the roads that touch or intersect the second state `r stateUT$NAME_1[[1]]`, but it does not actually trim or cut the roads when they extend past the administration borders. We can use `st_intersection` (will trim and only keep geometries that are inside the state/UT) for more accuracy, but the computation time would rise drastically, so we will stick with `st_intersects` (only checks for TRUE or FALSE comparisons, but does not modify the geometries) for now.
+Looking at the plot, we can see that we have extracted the roads that touch or intersect the second state `r stateUT$NAME_1[[1]]`, but it does not actually trim or cut the roads when they extend past the state/UT borders. We can use `st_intersection` (will trim and only keep geometries that are inside the state/UT) for more accuracy, but the computation time would rise, so we will stick with `st_intersects` (only checks for TRUE or FALSE comparisons, but does not modify the geometries) for the purpose of this walkthrough.
 
 ## Calculating Road Lengths and Vertex Statistics
 
@@ -315,8 +398,9 @@ stateUT <- st_sf(stateUT)
 # Interactively view the results
 mapview(stateUT, viewer.suppress = F)
 ```
+
   
-Click on the state, and you will now notice that there are extra data on the road length and vertex statistics added to it.
+Click on the state, and you will now notice that there are extra data on the road length and vertex statistics added to it. If we had done this for all the other states/UTs, we can compare them using numbers, and highlight states/UTs with road densities that are higher than normal to give a better visual representation of our data, but for now we have shown that we can indeed process one state/UT in a reasonable amount of time, and can repeat this process for all the other 35 states/UTs.
 
 ## Reviewing the Processing Times for Extraction
 
@@ -340,11 +424,11 @@ We can see that the total time for our extraction approach is `r format(totalTim
 
 # Ending Off with a Few Thoughts
 
-So we started with the idea to extract a number of informative aggregate characteristics of roads in India by state/UT, but found that there may be some issues with accuracy (coordinate system and trimming near state/UT boundaries) and computation time (time it took to process one state/UT).
+We started with the idea to extract a number of informative aggregate characteristics of roads in India by state/UT, but found that there may be some issues with accuracy (coordinate system and trimming near state/UT boundaries) and computation time (time it took to process one state/UT).
 
 Ideally, we should project each state/UT to an appropriate planar coordinate system to achieve more accurate spatial intersection results. There should probably also be a good amount of trimming/cutting involved as roads tend to be partially outside the boundaries of the states/UTs.
 
-Although the data was only a few megabytes, the computation time was roughly `r format(totalTime, usetz = T)` minutes for the single state/UT, estimated to be `r format(totalTime * nrow(admin), usetz = T)` for all state/UTs. This could be problematic as we receive finer boundary or road data, and scale to larger more detailed datasets.
+Although the data was only a few megabytes, the computation time was roughly `r format(round(totalTime, digits = 2), usetz = T)` minutes for the single state/UT, estimated to be `r format(round(totalTime * nrow(admin), digits = 2), usetz = T)` for all state/UTs. This could be problematic as we receive finer boundary or road data, and scale to larger more detailed datasets.
 
 Some exploration into optimizing the spatial intersections and trimming/cutting could be a good start to obtaining quicker results in a reasonable amount of time (especially for learning or education).
 
@@ -354,4 +438,4 @@ Overall, R has proven to be great for trying out ideas, experimenting with new l
 
 I am hoping to take this idea a little further and apply it to study traffic crashes in India, and perhaps refine this walkthrough so it becomes a little more beginner friendly.
 
-It was a lot of fun to write this and I'm hoping to try out some more ideas when I have some more time!
+It was a lot of fun to write this and I'm hoping to try out some more ideas/thoughts when I have time!
