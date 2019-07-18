@@ -258,7 +258,7 @@ The goal is to have road length and vertex statistics for each state/UT in India
 
 **Note 2:** For simplicity, We have not projected the geographic coordinates (spherical coordinates measured from earth's center) into planar coordinates (projected geographic coordinates onto a 2D surface) so the intersection algorithm may also not be completely accurate when measuring distances to determine if roads intersect the state/UTs.
 
-## Picking the State for Our Approach
+## Picking the State/UT for Our Approach
 
 We will look at the different areas of the states/UTs in kilometers squared, and pick a state closest to the average area as our selection criteria. The idea is to select a state with an average area so we have an idea how long it will roughly take to process one state of average size.
 
