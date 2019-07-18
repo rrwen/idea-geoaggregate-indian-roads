@@ -110,7 +110,7 @@ More details on shapefiles can be found [here](https://www.esri.com/library/whit
 
 ## Reading the data into R
 
-Now that we hae some understanding of the file formats, we can try reading some of the files into R:
+Now that we have some understanding of the file formats, we can try reading some of the files into R:
 
 ```{r data-read-try}
 lvl0Data <- st_read("data/india-admin-areas/IND_adm0.shp")
