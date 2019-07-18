@@ -212,7 +212,8 @@ It's pretty cool - try it out!:
 ```{r visual-interactive-admin}
 mapview(admin, viewer.suppress = F)
 ```
-
+  
+  
 Although we can view single datasets by themselves, they are often not too interesting until we layer them on top of another dataset. We do that by first creating an initial map `roadsMap`, then we add another map to it with the `map = roadsMap` option, which tells `mapView` which existing map the new map should be added to:
 
 Finally, let's play around with some styling options and create a dark themed map!
@@ -235,7 +236,7 @@ mapView(admin, map = roadsMap,
         layer.name = "States/UTs",
         lwd = 1)
 ```
-
+  
   
 As we saw before, particular regions have more "compact" roads or road density - notably the eastern half of India and towards the south. We can inspect some of the states in these areas further by clicking on them. Here a few states are worth noting as they are more "road dense" throughout their entire areas: Jharkhand, Tamil Nadu, Telangana, Karnataka, Chhattisgarh (to name a few). However, visual inspection can be a little subjective as it can be based on perspective and visual design - this is where doing some calculations with the data will help!
 
@@ -398,7 +399,7 @@ stateUT <- st_sf(stateUT)
 # Interactively view the results
 mapview(stateUT, viewer.suppress = F)
 ```
-
+  
   
 Click on the state, and you will now notice that there are extra data on the road length and vertex statistics added to it. If we had done this for all the other states/UTs, we can compare them using numbers, and highlight states/UTs with road densities that are higher than normal to give a better visual representation of our data, but for now we have shown that we can indeed process one state/UT in a reasonable amount of time, and can repeat this process for all the other 35 states/UTs.
 
