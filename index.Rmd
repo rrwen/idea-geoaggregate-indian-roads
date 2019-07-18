@@ -27,7 +27,7 @@ You will need to install:
 
 1. [R and RTools](https://www.r-project.org/) programming language and compiler tool
 2. [R Studio](https://www.rstudio.com/) (*Suggested*) editor for easily working with R
-3. [sf](https://cran.r-project.org/package=sf), [mapview](https://cran.r-project.org/package=mapview), and [lwgeom](https://cran.r-project.org/package=lwgeom) libraries in the R console (seen below)
+3. [sf](https://cran.r-project.org/package=sf), [mapview](https://cran.r-project.org/package=mapview), [lwgeom](https://cran.r-project.org/package=lwgeom), and [units](https://cran.r-project.org/package=units) libraries in the R console (seen below)
 
 ```{r requirements-install, eval=F}
 install.packages(c("sf", "lwgeom"))
@@ -40,6 +40,8 @@ install.packages(c("sf", "lwgeom"))
 [mapview](https://cran.r-project.org/package=mapview) provides interactive mapping functionality so we can inspect geospatial data in detail. For our particular purpose, it also provides a handy `npts` function that allows us to extract the number of vertices given a polygon or polyline.
 
 [lwgeom](https://cran.r-project.org/package=lwgeom) is needed by sf to get the lengths of polylines and other geometric objects, so we will install it to satisfy the dependencies.
+
+[units](https://cran.r-project.org/package=units) is package for converting and handling units of measurements. We will use this package to convert unit of measurements for our area calculations when deciding on a state/UT to use.
 
 ## Loading the R Libraries
 
@@ -258,27 +260,29 @@ The goal is to have road length and vertex statistics for each state/UT in India
 
 ## Picking the State for Our Approach
 
-We will look at the different areas of the states/UTs in meters squared, and pick a state closest to the average area as our selection criteria. The idea is to select a state with an average area so we have an idea how long it will roughly take to process one state of average size.
+We will look at the different areas of the states/UTs in kilometers squared, and pick a state closest to the average area as our selection criteria. The idea is to select a state with an average area so we have an idea how long it will roughly take to process one state of average size.
 
-First, we can compute the areas in meters squared and add it to our administrative areas data `admin`, then plot it as a bar graph:
+First, we can compute the areas in kilometers squared and add it to our administrative areas data `admin`, then plot it as a bar graph:
 
 ```{r extract-pick-area}
-# Get areas in meters squared and add it to the data
-admin$area_meters_sq <- st_area(admin)
+# Get areas in kilometers squared, covert to km squared and add it to the data
+admin$area <- st_area(admin)
+admin$area <- units::set_units(admin$area, "km^2") # convert to kilometers
 
 # Sort the data by area
-admin <- admin[order(-admin$area_meters_sq), ]
+admin <- admin[order(-admin$area), ]
 
 # Produce a bar plot of the state/UT names and their areas
-x <- as.numeric(admin$area_meters_sq)
+x <- as.numeric(admin$area)
 y <- admin$NAME_1
-par(mar=c(4.5, 6, 0, 1)) # Increase margins to fit plot
+options(scipen=5) # Prevent scientific notation for our plot
+par(mar=c(4, 6, 0, 1)) # Increase margins to fit plot
 barplot(x, names.arg = y,
         horiz = T, las = 2, cex.names = 0.5, # hor. labels
         border = "white") # line color of bars
 ```
 
-We can see from the graph that India has relatively even number of state/UTs of varying sizes from `r min(admin$area_meters_sq)` to `r max(admin$area_meters_sq)`.
+We can see from the graph that India has relatively even number of state/UTs of varying sizes from `r floor(min(admin$area))` kilometers squared to `r ceiling(max(admin$area))` kilometers squared.
 
 Next, we want to get the state closest to the average size given all states/UTs in India. For reference, this will be the state/UT with an area that has the smallest absolute difference from the average state/UT area:
 
@@ -291,7 +295,7 @@ $$
 where $\bar{x}$ is the average area of all state/UTs, $x_1 + x_2 + x_3 \dots x_n$ is the sum of the areas for a states 1 to `r nrow(admin)`, and $n$ is the number of states (`r nrow(admin)` in this case).
 
 ```{r extract-pick-mean}
-x <- admin$area_meters_sq
+x <- admin$area
 xMean <- mean(x)
 ```
 
@@ -319,10 +323,10 @@ stateUT <- admin[which(d == dMin),]
 Let's inspect the state/UT we picked from our selection criteria:
 
 ```{r extract-pick-inspect}
-stateUT[, c("NAME_1", "area_meters_sq")]
+stateUT[, c("NAME_1", "area")]
 ```
 
-We can see that we selected state/UT `r stateUT$NAME_1[[1]]`, with an area of `r as.character(stateUT$area_meters_sq[[1]])` meters squared, which is close to the average area of `r as.character(xMean)` meters squared.
+We can see that we selected state/UT `r stateUT$NAME_1[[1]]`, with an area of about `r as.character(round(stateUT$area[[1]]))` kilometers squared, which is close to the average area of approximately `r as.character(round(xMean))` kilometers squared.
 
 ## Extracting Intersecting Roads
 

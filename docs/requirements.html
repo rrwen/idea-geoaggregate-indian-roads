@@ -185,7 +185,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ol style="list-style-type: decimal">
 <li><a href="https://www.r-project.org/">R and RTools</a> programming language and compiler tool</li>
 <li><a href="https://www.rstudio.com/">R Studio</a> (<em>Suggested</em>) editor for easily working with R</li>
-<li><a href="https://cran.r-project.org/package=sf">sf</a>, <a href="https://cran.r-project.org/package=mapview">mapview</a>, and <a href="https://cran.r-project.org/package=lwgeom">lwgeom</a> libraries in the R console (seen below)</li>
+<li><a href="https://cran.r-project.org/package=sf">sf</a>, <a href="https://cran.r-project.org/package=mapview">mapview</a>, <a href="https://cran.r-project.org/package=lwgeom">lwgeom</a>, and <a href="https://cran.r-project.org/package=units">units</a> libraries in the R console (seen below)</li>
 </ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;sf&quot;</span>, <span class="st">&quot;lwgeom&quot;</span>))</a></code></pre></div>
 <div id="overview-of-r-packages" class="section level2">
@@ -193,6 +193,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><a href="https://cran.r-project.org/package=sf">sf</a> is a very convenient and relatively user-friendly R package that provides tools for working with geometries - making it easy to read, write, and work with geospatial data.</p>
 <p><a href="https://cran.r-project.org/package=mapview">mapview</a> provides interactive mapping functionality so we can inspect geospatial data in detail. For our particular purpose, it also provides a handy <code>npts</code> function that allows us to extract the number of vertices given a polygon or polyline.</p>
 <p><a href="https://cran.r-project.org/package=lwgeom">lwgeom</a> is needed by sf to get the lengths of polylines and other geometric objects, so we will install it to satisfy the dependencies.</p>
+<p><a href="https://cran.r-project.org/package=units">units</a> is package for converting and handling units of measurements. We will use this package to convert unit of measurements for our area calculations when deciding on a state/UT to use.</p>
 </div>
 <div id="loading-the-r-libraries" class="section level2">
 <h2><span class="header-section-number">2.2</span> Loading the R Libraries</h2>
