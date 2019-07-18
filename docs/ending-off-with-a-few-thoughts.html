@@ -137,7 +137,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Motivation</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> The Idea</a></li>
 <li class="chapter" data-level="2" data-path="requirements.html"><a href="requirements.html"><i class="fa fa-check"></i><b>2</b> Requirements</a><ul>
 <li class="chapter" data-level="2.1" data-path="requirements.html"><a href="requirements.html#overview-of-r-packages"><i class="fa fa-check"></i><b>2.1</b> Overview of R Packages</a></li>
 <li class="chapter" data-level="2.2" data-path="requirements.html"><a href="requirements.html#loading-the-r-libraries"><i class="fa fa-check"></i><b>2.2</b> Loading the R Libraries</a></li>
@@ -147,11 +147,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#inspecting-the-data"><i class="fa fa-check"></i><b>3.2</b> Inspecting the Data</a></li>
 <li class="chapter" data-level="3.3" data-path="getting-the-diva-gis-data.html"><a href="getting-the-diva-gis-data.html#reading-the-data-into-r"><i class="fa fa-check"></i><b>3.3</b> Reading the data into R</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html"><i class="fa fa-check"></i><b>4</b> Visually and Interactively Exploring Our Data</a></li>
+<li class="chapter" data-level="4" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html"><i class="fa fa-check"></i><b>4</b> Visually and Interactively Exploring Our Data</a><ul>
+<li class="chapter" data-level="4.1" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html#static-mapping"><i class="fa fa-check"></i><b>4.1</b> Static Mapping</a></li>
+<li class="chapter" data-level="4.2" data-path="visually-and-interactively-exploring-our-data.html"><a href="visually-and-interactively-exploring-our-data.html#web-mapping"><i class="fa fa-check"></i><b>4.2</b> Web Mapping</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="extracting-road-lengths-and-vertices.html"><a href="extracting-road-lengths-and-vertices.html"><i class="fa fa-check"></i><b>5</b> Extracting Road Lengths and Vertices</a><ul>
-<li class="chapter" data-level="5.1" data-path="extracting-road-lengths-and-vertices.html"><a href="extracting-road-lengths-and-vertices.html#extracting-intersecting-roads"><i class="fa fa-check"></i><b>5.1</b> Extracting Intersecting Roads</a></li>
-<li class="chapter" data-level="5.2" data-path="extracting-road-lengths-and-vertices.html"><a href="extracting-road-lengths-and-vertices.html#calculating-road-lengths-and-vertex-statistics"><i class="fa fa-check"></i><b>5.2</b> Calculating Road Lengths and Vertex Statistics</a></li>
-<li class="chapter" data-level="5.3" data-path="extracting-road-lengths-and-vertices.html"><a href="extracting-road-lengths-and-vertices.html#adding-statistics-to-the-stateut"><i class="fa fa-check"></i><b>5.3</b> Adding Statistics to the State/UT</a></li>
+<li class="chapter" data-level="5.1" data-path="extracting-road-lengths-and-vertices.html"><a href="extracting-road-lengths-and-vertices.html#picking-the-state-for-our-approach"><i class="fa fa-check"></i><b>5.1</b> Picking the State for Our Approach</a></li>
+<li class="chapter" data-level="5.2" data-path="extracting-road-lengths-and-vertices.html"><a href="extracting-road-lengths-and-vertices.html#extracting-intersecting-roads"><i class="fa fa-check"></i><b>5.2</b> Extracting Intersecting Roads</a></li>
+<li class="chapter" data-level="5.3" data-path="extracting-road-lengths-and-vertices.html"><a href="extracting-road-lengths-and-vertices.html#calculating-road-lengths-and-vertex-statistics"><i class="fa fa-check"></i><b>5.3</b> Calculating Road Lengths and Vertex Statistics</a></li>
+<li class="chapter" data-level="5.4" data-path="extracting-road-lengths-and-vertices.html"><a href="extracting-road-lengths-and-vertices.html#adding-statistics-to-the-stateut"><i class="fa fa-check"></i><b>5.4</b> Adding Statistics to the State/UT</a></li>
+<li class="chapter" data-level="5.5" data-path="extracting-road-lengths-and-vertices.html"><a href="extracting-road-lengths-and-vertices.html#reviewing-the-processing-times-for-extraction"><i class="fa fa-check"></i><b>5.5</b> Reviewing the Processing Times for Extraction</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="ending-off-with-a-few-thoughts.html"><a href="ending-off-with-a-few-thoughts.html"><i class="fa fa-check"></i><b>6</b> Ending Off with a Few Thoughts</a></li>
 </ul>
@@ -173,13 +178,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="ending-off-with-a-few-thoughts" class="section level1">
 <h1><span class="header-section-number">6</span> Ending Off with a Few Thoughts</h1>
-<p>Recalling that the idea was to extract a number of informative aggregate characteristics of roads in India by state/UT, there may be some issues with accuracy and computation time.</p>
+<p>So we started with the idea to extract a number of informative aggregate characteristics of roads in India by state/UT, but found that there may be some issues with accuracy (coordinate system and trimming near state/UT boundaries) and computation time (time it took to process one state/UT).</p>
 <p>Ideally, we should project each state/UT to an appropriate planar coordinate system to achieve more accurate spatial intersection results. There should probably also be a good amount of trimming/cutting involved as roads tend to be partially outside the boundaries of the states/UTs.</p>
-<p>Although the data was only a few megabytes, the computation time was roughly 2-3 minutes for the single state/UT. This could be problematic as we receive finer boundary or road data and scale to larger datasets.</p>
+<p>Although the data was only a few megabytes, the computation time was roughly 11.61999 secs minutes for the single state/UT, estimated to be 418.3197 secs for all state/UTs. This could be problematic as we receive finer boundary or road data, and scale to larger more detailed datasets.</p>
 <p>Some exploration into optimizing the spatial intersections and trimming/cutting could be a good start to obtaining quicker results in a reasonable amount of time (especially for learning or education).</p>
 <p>Getting the road lengths and vertices statistics could be useful (as far as I can tell) in providing information on road complexity and development. This could be a potentially good measure for getting a glimpse at the general road design at a state/UT level, while providing some insight into whether or not road design at that level has an effect on important applications such as road traffic safety.</p>
 <p>Overall, R has proven to be great for trying out ideas, experimenting with new libraries, and providing an easier transition into open source data analysis for those unfamiliar with spatial data handling - particularly when <code>install.packages</code> just works without any hiccups on windows!</p>
-<p>I am hoping to take this idea a little further and apply it to study traffic crashes in India, and perhaps refine this walkthrough it so it becomes a little more beginner friendly.</p>
+<p>I am hoping to take this idea a little further and apply it to study traffic crashes in India, and perhaps refine this walkthrough so it becomes a little more beginner friendly.</p>
 <p>It was a lot of fun to write this and I’m hoping to try out some more ideas when I have some time!</p>
 
 </div>
@@ -234,6 +239,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
